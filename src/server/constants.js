@@ -3,6 +3,12 @@ const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds163060.mlab.com:63060/comic-cac
 const SOURCE_URL = 'http://readcomiconline.to/';
 
 const ROUTES = {
+  all: '/*',
+  root: '/',
+  auth: {
+    login: '/login',
+    logout: '/logout'
+  },
   comics: {
     list: '/comics/:letter(0|[a-z])?/:page(\\d+)?',
     search: '/comics/search/:keyword/:genres([012]{47})?/:status(ongoing|completed)?',

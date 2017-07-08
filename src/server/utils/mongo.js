@@ -19,7 +19,16 @@ const saveCache = async (data, cacheKey) => {
   await db.close();
 }
 
+const retrieveUser = async (user) => {
+  const db = await mongo.connect(CONST.MONGO_URL);
+  const document = await db.collection('users').findOne({user}, {_id: 0, user: 1 });
+  await db.close();
+
+  return document;
+}
+
 module.exports = {
   checkCache,
-  saveCache
+  saveCache,
+  retrieveUser
 }

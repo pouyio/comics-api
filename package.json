@@ -7,7 +7,7 @@
     "start": "node app.js",
     "start:inspect": "node --inspect app.js",
     "start:break": "node --inspect-brk app.js",
-    "start:demon" : "nodemon --ignore 'cookies.json' app.js",
+    "start:demon": "nodemon --ignore 'cookies.json' app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -17,6 +17,7 @@
     "cheerio": "^1.0.0-rc.1",
     "errorhandler": "^1.5.0",
     "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
     "mongodb": "^2.2.29",
     "mongodb-promise": "0.0.4",
     "morgan": "^1.8.2",
@@ -24,8 +25,5 @@
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "tough-cookie-filestore": "0.0.1"
-  },
-  "devDependencies": {
-    "tough-cookie": "^2.3.2"
   }
 }

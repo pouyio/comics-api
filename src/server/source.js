@@ -20,7 +20,6 @@ const _get_cookie_filename = () => {
 const make_request = async (request_options) => {
   // TODO leave only one headers object global
   const request_headers = {
-    // "Cookie": "cf_clearance=fe72028ac3bfad563ac958d982549cafbbbce3ce-1499272349-1800",
     "Host": 'readcomiconline.to',
     "Upgrade-Insecure-Requests": '1',
     "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',

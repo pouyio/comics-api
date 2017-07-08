@@ -9,8 +9,6 @@ const mongo = require('./utils/mongo');
 
 const CONST = require('./constants');
 
-router.get('', (req, res) => res.json({ok: 1}));
-
 router.get(CONST.ROUTES.comic.detail, async (req, res) => {
   const url = `${CONST.SOURCE_URL}Comic/${req.params.name}`;
   const cache_key = get_cache_key('comics\\:detail\\::name', req.params);
@@ -49,6 +47,7 @@ router.post(CONST.ROUTES.comic.issue, (req, res) => {
 
 });
 
+// TODO add cache
 router.get(CONST.ROUTES.comics.search, setCookie, async (req, res) => {
   let request_options = {
     url: `${CONST.SOURCE_URL}Search/SearchSuggest`,
