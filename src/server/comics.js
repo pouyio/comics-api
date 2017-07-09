@@ -39,6 +39,12 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
 
 });
 
+// TODO retrieve user from req.user, implement in auth middleware
+router.post(CONST.ROUTES.comic.detail, async (req, res) => {
+  let result = await mongo.markIssueRead(req.params.name, req.body.issue, req.body.read, 'pouyio');
+  res.send(result);
+});
+
 router.get(CONST.ROUTES.comic.issue, async (req, res) => {
   const url = `${CONST.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
   const cache_key = get_cache_key('comics\\:detail\\::name\\::issue', req.params);

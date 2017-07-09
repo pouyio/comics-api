@@ -46,10 +46,31 @@ const retrieveIssuesRead = async (comic, user) => {
   return document;
 }
 
+// TODO filtere by user
+const markIssueRead = async (comic, issue, value, user) => {
+  let operation = value ? {
+    $addToSet: {
+      issues: `${comic}-${issue}`
+    }
+  } : {
+    $pull: {
+      issues: `${comic}-${issue}`
+    }
+  };
+
+  const db = await mongo.connect(CONST.MONGO_URL);
+  const result = await db.collection('read').update({ 'comic': comic}, operation, {upsert: true});
+  await db.close();
+
+  return result;
+}
+
+
 module.exports = {
   checkCache,
   saveCache,
   retrieveUser,
   retrieveComicsRead,
-  retrieveIssuesRead
+  retrieveIssuesRead,
+  markIssueRead
 }
