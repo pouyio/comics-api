@@ -5,6 +5,7 @@ const SOURCE_URL = 'http://readcomiconline.to/';
 const ROUTES = {
   all: '/*',
   root: '/',
+  img: '/img/*',
   auth: {
     login: '/login',
     logout: '/logout'
@@ -18,7 +19,6 @@ const ROUTES = {
     detail: '/comic/:name',
     issue: '/comic/:name/:issue'
   },
-  encode: '/encode?:imageUrl',
   genres: '/genres/:name?/:page?',
   publishers: '/publishers/:name/:page?',
   writers: '/writers/:name/:page?',
@@ -26,9 +26,6 @@ const ROUTES = {
 };
 
 const GENRES = ['Action', 'Adventure', 'Anthology', 'Anthropomorphic', 'Biography', 'Children', 'Comedy', 'Crime', 'Drama', 'Family', 'Fantasy', 'Fighting', 'Graphic Novels', 'Historical', 'Horror', 'Leading Ladies', 'LGBTQ', 'Literature', 'Manga', 'Martial Arts', 'Mature', 'Military', 'Movies & TV', 'Mystery', 'Mythology', 'Personal', 'Political', 'Post-Apocalyptic', 'Psychological', 'Pulp', 'Religious', 'Robots', 'Romance', 'School Life', 'Sci-Fi', 'Slice of Life', 'Sport', 'Spy', 'Superhero', 'Supernatural', 'Suspense', 'Thriller', 'Vampires', 'Video Games', 'War', 'Western', 'Zombies'];
-
-
-
 
 Object.assign(module.exports, {
   ROUTES,

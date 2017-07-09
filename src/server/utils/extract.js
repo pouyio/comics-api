@@ -4,6 +4,8 @@ const make_url = require('./make_url');
 const CONST = require('../constants');
 
 const _get_url_last_part = (url) => url.replace(/^.*?\/([^\/]+?)(\?.+)?$/, '$1').toLowerCase();
+// TODO make domain dynamic
+const _get_url_img = (url) => url.replace(CONST.SOURCE_URL, 'http://localhost:8080/img/');
 
 const _get_linked_data = ($data, type) => {
   const id = _get_url_last_part($data.attr('href'));
@@ -278,20 +280,24 @@ const issue = (body, request) => {
 
 const searchList = (body, request) => {
   let $ = cheerio.load(body);
-  let data = $('a').map((i, e) => {
-    let comicId = $(e).attr('href').split('/').pop();
-    let comic = {
-      type: 'comics',
-      id: comicId,
-      attributes: {
-        title: $(e).text()
-      },
-      links: {
-        self: make_url(CONST.ROUTES.comic.detail, { name: comicId })
-      }
-    };
-    return comic; {link: $(e).attr('href')}
-  }).get();
+  let data = $('.listing tr td')
+    .filter((i, e) => $(e).attr('title'))
+    .map((i, e) => {
+
+      let $info = cheerio.load($(e).attr('title'));
+      let comicId = $info('div a').attr('href').split('/').pop();
+      return {
+        type: 'comics',
+        id: comicId,
+        attributes: {
+          title: $info('div a').text()
+        },
+        links: {
+          self: make_url(CONST.ROUTES.comic.detail, { name: comicId }),
+          cover: _get_url_img($info('img').attr('src'))
+        }
+      };
+    }).get();
 
   return {data};
 }

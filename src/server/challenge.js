@@ -60,6 +60,8 @@ const pass = (url, html) => {
         gzip: true
       };
 
+      // if(encodingNull) request_options.encoding = null;
+
       // Wait 4 seconds to simulate the sleep on the web page
       setTimeout(() => {
         resolve(request_options);

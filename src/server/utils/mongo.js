@@ -27,8 +27,17 @@ const retrieveUser = async (user) => {
   return document;
 }
 
+const retrieveReads = async (user) => {
+  const db = await mongo.connect(CONST.MONGO_URL);
+  const document = await db.collection('read').find({ 'issues.0': {$exists: true}}, {'_id': 0}).toArray();
+  await db.close();
+
+  return document;
+}
+
 module.exports = {
   checkCache,
   saveCache,
-  retrieveUser
+  retrieveUser,
+  retrieveReads
 }

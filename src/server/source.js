@@ -31,9 +31,10 @@ const make_request = async (request_options) => {
 
   if (typeof request_options == 'string') {
     request_options = {
-      jar: request.jar(new FileCookieStore(_get_cookie_filename())),
       url: request_options,
-      headers: request_headers
+      headers: request_headers,
+      jar: request.jar(new FileCookieStore(_get_cookie_filename())),
+      gzip: true
     };
   } else if (typeof request_options == 'object') {
 
@@ -64,6 +65,7 @@ const make_request = async (request_options) => {
   } catch(e) {
     console.log('Challenge necessary, trying to pass it');
     let challenge_options = await challenge.pass(request_options.url, e.error);
+    if(request_options.encoding === null) challenge_options.encoding = null;
 
     challenge.log(challenge_options, request_options);
 
