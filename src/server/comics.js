@@ -29,6 +29,8 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
     let body = await sourceServer.makeRequest({url});
     let json = await extract.details(body, req);
     mongo.saveCache(json, cache_key);
+    let issuesRead = await mongo.retrieveIssuesRead(req.params.name, 'pouyio');
+    Object.assign(json, {issuesRead});
     res.send(json);
   } catch (err) {
     console.log(err);
@@ -108,7 +110,7 @@ router.get(CONST.ROUTES.comics.list, async (req, res) => {
 });
 
 router.get(CONST.ROUTES.comics.read, async (req, res) => {
-  let result = await mongo.retrieveReads('pouyio');
+  let result = await mongo.retrieveComicsRead('pouyio');
   res.send(result);
 });
 
