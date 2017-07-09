@@ -46,7 +46,7 @@ const retrieveIssuesRead = async (comic, user) => {
 
 const markIssueRead = async (comic, issue, value, user) => {
   let operation = {};
-  operation[value ? '$addToSet': '$pull'] = {issues: `${comic}-${issue}`};
+  operation[value ? '$addToSet': '$pull'] = {issues: issue};
 
   const db = await mongo.connect(CONST.MONGO_URL);
   const result = await db.collection('read').update({comic, user}, operation, {upsert: true});

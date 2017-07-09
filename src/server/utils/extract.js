@@ -280,17 +280,19 @@ const issue = (body, request) => {
 
 const searchList = (body, request) => {
   let $ = cheerio.load(body);
-  let data = $('.listing tr td')
-    .filter((i, e) => $(e).attr('title'))
+  let data = $('.listing tr').not('.head')
+    .filter((i, e) => i != 0)
     .map((i, e) => {
 
-      let $info = cheerio.load($(e).attr('title'));
+      let $info = cheerio.load($(e).find('td[title]').attr('title'));
       let comicId = $info('div a').attr('href').split('/').pop();
       return {
         type: 'comics',
         id: comicId,
         attributes: {
-          title: $info('div a').text()
+          title: $info('div a').text(),
+          summary: $info('div p').text().trim(),
+          completed: ($(e).find('td').not('[title]').text().trim() === 'Completed') ? true: false
         },
         links: {
           self: make_url(CONST.ROUTES.comic.detail, { name: comicId }),
