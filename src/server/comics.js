@@ -9,18 +9,6 @@ const mongo = require('./utils/mongo');
 
 const CONST = require('./constants');
 
-router.get(CONST.ROUTES.img, async (req, res) => {
-  const url = `${CONST.SOURCE_URL}${req.params['0']}`;
-  try {
-    let body = await sourceServer.makeRequest({url, encoding: null});
-    res.header('Content-Type', 'image/jpeg');
-    res.send(body);
-  } catch (err) {
-    console.log(err);
-    res.end();
-  }
-})
-
 router.get(CONST.ROUTES.comic.detail, async (req, res) => {
   const url = `${CONST.SOURCE_URL}Comic/${req.params.name}`;
   const cache_key = get_cache_key('comics\\:detail\\::name', req.params);

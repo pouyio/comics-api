@@ -8,6 +8,8 @@ router.get(CONST.ROUTES.comic.detail, async (req, res, next) => {
 
   if(response) {
     console.log('From cache');
+    let issuesRead = await mongo.retrieveIssuesRead(req.params.name, req.user);
+    Object.assign(response, {issuesRead});
     res.send(response);
   } else {
     next();

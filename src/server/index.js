@@ -14,18 +14,26 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(errorHandler({showStack: true, dumpExceptions: true}));
 
 app.use((req, res, next) => {
+
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-xsrf-token');
-  next();
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-xsrf-token, Authorization');
+
+    if ('OPTIONS' == req.method) {
+      res.sendStatus(200);
+    }
+    else {
+      next();
+    }
 });
 
 app.get(CONST.ROUTES.root, (req, res) => res.json({ok: 1}));
 
-// middleware
-app.use(CONST.ROUTES.root, auth);
 // app.use(CONST.ROUTES.all, (req, res, next) => {req.user= 'pouyio'; next()});
 // middleware
-app.use(CONST.ROUTES.root, comicsCache);
+app.use(CONST.ROUTES.root, auth);
+// middleware
+// app.use(CONST.ROUTES.root, comicsCache);
 
 app.use(CONST.ROUTES.root, comics);
 
