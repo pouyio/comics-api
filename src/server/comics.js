@@ -29,7 +29,7 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
     let body = await sourceServer.makeRequest({url});
     let json = await extract.details(body, req);
     mongo.saveCache(json, cache_key);
-    let issuesRead = await mongo.retrieveIssuesRead(req.params.name, 'pouyio');
+    let issuesRead = await mongo.retrieveIssuesRead(req.params.name, req.user);
     Object.assign(json, {issuesRead});
     res.send(json);
   } catch (err) {
@@ -39,9 +39,8 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
 
 });
 
-// TODO retrieve user from req.user, implement in auth middleware
 router.post(CONST.ROUTES.comic.detail, async (req, res) => {
-  let result = await mongo.markIssueRead(req.params.name, req.body.issue, req.body.read, 'pouyio');
+  let result = await mongo.markIssueRead(req.params.name, req.body.issue, req.body.read, req.user);
   res.send(result);
 });
 
@@ -67,7 +66,6 @@ router.post(CONST.ROUTES.comic.issue, (req, res) => {
 
 });
 
-// TODO add cache
 router.get(CONST.ROUTES.comics.search, setCookie, async (req, res) => {
   let request_options = {
     url: `${CONST.SOURCE_URL}AdvanceSearch`,
@@ -116,7 +114,7 @@ router.get(CONST.ROUTES.comics.list, async (req, res) => {
 });
 
 router.get(CONST.ROUTES.comics.read, async (req, res) => {
-  let result = await mongo.retrieveComicsRead('pouyio');
+  let result = await mongo.retrieveComicsRead(req.user);
   res.send(result);
 });
 

@@ -18,6 +18,7 @@ const _check_token = async (req, res, next) => {
 
   // TODO avoid making this DB request everytime, save in memory or smth
   if(await mongo.retrieveUser(user)) {
+    req.user = user;
     next();
     return;
   }

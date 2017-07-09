@@ -1,4 +1,3 @@
-// TODO add search
 const router = require('express').Router();
 const get_cache_key = require('./utils/get_cache_key');
 const mongo = require('./utils/mongo');
