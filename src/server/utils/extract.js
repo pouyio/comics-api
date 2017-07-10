@@ -172,7 +172,7 @@ const details = (body, request) => {
       }
     });
 
-    json_data.data.links.cover = cover_url;
+    json_data.data.links.cover = _get_url_img(cover_url);
     resolve(json_data);
 
   });
@@ -226,7 +226,6 @@ const listing = (body, request) => {
       var is_finished = $item.find('td:last-child a').length == 0;
       var comic_id = $url.attr('href').replace(/^\/Comic\//i, '').toLowerCase();
       var cover_url = $name_cell.attr('title').match(/img\s*.*?\s*src="(.*?)"/)[1];
-
       var comic = {
         type: 'comics',
         id: comic_id,
