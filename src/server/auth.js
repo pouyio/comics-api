@@ -13,7 +13,7 @@ const _check_token = async (req, res, next) => {
   try {
     user = await jwt.verify(req.headers.authorization, _secret);
   } catch(e) {
-    res.send(e);
+    res.status(401).send(e);
     return;
   }
 
