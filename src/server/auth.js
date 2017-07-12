@@ -27,9 +27,14 @@ const _check_token = async (req, res, next) => {
   res.status(401).send('User not registered');
 }
 
-router.post(CONST.ROUTES.auth.login, (req, res, next) => {
-  let token = jwt.sign(req.body.user, _secret);
-  res.send(token);
+router.post(CONST.ROUTES.auth.login, async (req, res, next) => {
+  if(await mongo.retrieveUser(req.body.user)) {
+    let token = jwt.sign(req.body.user, _secret);
+    res.send(token);
+    return;
+  }
+
+  res.status(401).send('User not registered');
 })
 
 router.get(CONST.ROUTES.img, async (req, res) => {

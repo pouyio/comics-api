@@ -44,6 +44,7 @@ const details = (body, request) => {
   var p = new Promise((resolve, reject) => {
     var $ = cheerio.load(body);
     var $data = $('#leftside > .bigBarContainer:first-child > .barContent');
+    if (!$data.length) resolve({});
     var cover_url = $('#rightside > .rightBox:first-child > .barContent img').attr('src');
 
     var json_data = {

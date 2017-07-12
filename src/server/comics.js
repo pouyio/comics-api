@@ -16,9 +16,11 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
   try {
     let body = await sourceServer.makeRequest({url});
     let json = await extract.details(body, req);
-    mongo.saveCache(json, cache_key);
-    let issuesRead = await mongo.retrieveIssuesRead(req.params.name, req.user);
-    Object.assign(json, {issuesRead});
+    if(json.data) {
+      mongo.saveCache(json, cache_key);
+      let issuesRead = await mongo.retrieveIssuesRead(req.params.name, req.user);
+      Object.assign(json, {issuesRead});
+    }
     res.send(json);
   } catch (err) {
     console.log(err);
