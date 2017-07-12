@@ -301,7 +301,7 @@ const searchList = (body, request) => {
       };
     }).get();
 
-  return {data};
+  return data;
 }
 
 module.exports = {
