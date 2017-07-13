@@ -280,7 +280,7 @@ const issue = (body, request) => {
 
 const searchList = (body, request) => {
   let $ = cheerio.load(body);
-  let data = $('.listing tr').not('.head')
+  return $('.listing tr').not('.head')
     .filter((i, e) => i != 0)
     .map((i, e) => {
 
@@ -300,13 +300,52 @@ const searchList = (body, request) => {
         }
       };
     }).get();
+}
 
-  return data;
+const news = (body, request) => {
+  let $ = cheerio.load(body);
+  let updated =  $('.items>div>a')
+    .filter(i => i<10)
+    .map((i, e) => {
+      let comicId = e.attribs.href.split('/').pop();
+      return {
+        type: 'comics',
+        id: comicId,
+        attributes: {
+          title: e.children[2].data,
+        },
+        links: {
+          self: make_url(CONST.ROUTES.comic.detail, { name: comicId }),
+          cover: _get_url_img(e.children[0].attribs.src  || '')
+        }
+      }
+    }).get();
+
+  // TODO genres available in DOM
+  let news =  $('#tab-newest>div')
+    .filter(i => i<8)
+    .map((i, e) => {
+      let comicId = e.children[0].attribs.href.split('/').pop();
+      return {
+        type: 'comics',
+        id: comicId,
+        attributes: {
+          title: e.children[1].children[0].children[0].data,
+        },
+        links: {
+          self: make_url(CONST.ROUTES.comic.detail, { name: comicId }),
+          cover: _get_url_img(e.children[0].children[0].attribs.src  || '')
+        }
+      }
+    }).get();
+
+  return {updated,news}
 }
 
 module.exports = {
   details,
   listing,
   issue,
-  searchList
+  searchList,
+  news
 }

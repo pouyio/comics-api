@@ -9,6 +9,17 @@ const mongo = require('./utils/mongo');
 
 const CONST = require('./constants');
 
+router.get(CONST.ROUTES.comics.news, async (req, res) => {
+  try {
+    let body = await sourceServer.makeRequest({url: CONST.SOURCE_URL});
+    let json = await extract.news(body, req);
+    res.send(json);
+  } catch (err) {
+    console.log(err);
+    res.end();
+  }
+});
+
 router.get(CONST.ROUTES.comic.detail, async (req, res) => {
   const url = `${CONST.SOURCE_URL}Comic/${req.params.name}`;
   const cache_key = get_cache_key('comics\\:detail\\::name', req.params);

@@ -13,7 +13,8 @@ const ROUTES = {
   comics: {
     list: '/comics/:letter(0|[a-z])?/:page(\\d+)?',
     search: '/comics/search/:keyword/:genres([012]{47})?/:status(ongoing|completed)?',
-    read: '/comics/read'
+    read: '/comics/read',
+    news: '/comics/news'
   },
   comic: {
     detail: '/comic/:name',
