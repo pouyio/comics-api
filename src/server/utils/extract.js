@@ -141,7 +141,6 @@ const details = (body, request) => {
         var issue_id = _get_url_last_part($item.find('a').attr('href'));
         var url = make_url(CONST.ROUTES.comic.issue, { name: json_data.data.id, issue: issue_id });
         var release_day = $item.find('td:last-child').text().trim();
-
         var issue = {
           id: `${json_data.data.id}-${issue_id}`,
           type: 'issues',

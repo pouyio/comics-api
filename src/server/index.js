@@ -33,7 +33,7 @@ app.get(CONST.ROUTES.root, (req, res) => res.json({ok: 1}));
 // middleware
 app.use(CONST.ROUTES.root, auth);
 // middleware
-// app.use(CONST.ROUTES.root, comicsCache);
+app.use(CONST.ROUTES.root, comicsCache);
 
 app.use(CONST.ROUTES.root, comics);
 
