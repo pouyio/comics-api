@@ -3,7 +3,7 @@ const app = express();
 const morgan = require('morgan');
 const errorHandler = require('errorhandler');
 const bodyParser = require('body-parser');
-const Webtask = require('webtask-tools');
+// const Webtask = require('webtask-tools');
 
 const auth = require('./auth');
 const comicsCache = require('./comics-cache');
@@ -40,4 +40,4 @@ app.use(CONST.ROUTES.root, comics);
 
 app.listen(process.env.PORT || 8080, () => console.log(`Comics-api2 listening on port ${process.env.PORT || 8080}!`));
 
-module.exports = Webtask.fromExpress(app);
+// module.exports = Webtask.fromExpress(app);
