@@ -5,7 +5,7 @@ const CONST = require('../constants');
 
 const _get_url_last_part = (url) => url.replace(/^.*?\/([^\/]+?)(\?.+)?$/, '$1').toLowerCase();
 // TODO make domain dynamic
-const _get_url_img = (url) => url.replace(CONST.SOURCE_URL, 'http://localhost:8080/img/');
+const _get_url_img = (url) => url.replace(CONST.SOURCE_URL, 'http://ec2-52-57-145-92.eu-central-1.compute.amazonaws.com:8080/img/');
 
 const _get_linked_data = ($data, type) => {
   const id = _get_url_last_part($data.attr('href'));
