@@ -1,25 +1,34 @@
-const request = require('request-promise');
-const challenge = require('./challenge');
-const FileCookieStore = require("tough-cookie-filestore");
-const fs = require('fs');
-const path = require('path');
+'use strict';
 
-const _get_cookie_filename = () => {
-  let full_path, stat;
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var request = require('request-promise');
+var challenge = require('./challenge');
+var FileCookieStore = require("tough-cookie-filestore");
+var fs = require('fs');
+var path = require('path');
+
+var _get_cookie_filename = function _get_cookie_filename() {
+  var full_path = void 0,
+      stat = void 0;
   try {
     full_path = path.resolve('cookies.json');
     stat = fs.statSync(full_path);
   } catch (err) {
-    let fd = fs.openSync(full_path, 'w');
+    var fd = fs.openSync(full_path, 'w');
     fs.closeSync(fs.openSync(full_path, 'w'));
   }
 
   return full_path;
 };
 
-const make_request = async (request_options) => {
+var make_request = async function make_request(request_options) {
   // TODO leave only one headers object global
-  const request_headers = {
+  var request_headers = {
     "Host": 'readcomiconline.to',
     "Upgrade-Insecure-Requests": '1',
     "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
@@ -36,49 +45,46 @@ const make_request = async (request_options) => {
       jar: request.jar(new FileCookieStore(_get_cookie_filename())),
       gzip: true
     };
-  } else if (typeof request_options == 'object') {
+  } else if ((typeof request_options === 'undefined' ? 'undefined' : (0, _typeof3.default)(request_options)) == 'object') {
 
     Object.assign(request_options, {
       headers: Object.assign(request_headers, request_options.headers),
       jar: request.jar(new FileCookieStore(_get_cookie_filename())),
       gzip: true
     }, request_options);
-
   }
 
   if (!!request_options.qs) {
     var query_string_parameters = [];
 
     for (var key in request_options.qs) {
-      query_string_parameters.push(`${key}=${request_options.qs[key]}`);
+      query_string_parameters.push(key + '=' + request_options.qs[key]);
     }
 
-    request_options.url += `?${query_string_parameters.join('&')}`;
+    request_options.url += '?' + query_string_parameters.join('&');
     delete request_options.qs;
   }
 
   try {
-    let res = await request(request_options);
+    var res = await request(request_options);
     console.log('Challenge not needed');
     return res;
-
-  } catch(e) {
+  } catch (e) {
     console.log('Challenge necessary, trying to pass it');
-    let challenge_options = await challenge.pass(request_options.url, e.error);
-    if(request_options.encoding === null) challenge_options.encoding = null;
+    var challenge_options = await challenge.pass(request_options.url, e.error);
+    if (request_options.encoding === null) challenge_options.encoding = null;
 
     challenge.log(challenge_options, request_options);
 
     try {
-      let a = await make_request(challenge_options);
+      var a = await make_request(challenge_options);
       return a;
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
-
-}
+};
 
 Object.assign(module.exports, {
   makeRequest: make_request
-})
+});

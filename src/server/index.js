@@ -3,6 +3,8 @@ const app = express();
 const morgan = require('morgan');
 const errorHandler = require('errorhandler');
 const bodyParser = require('body-parser');
+const Webtask = require('webtask-tools');
+
 const auth = require('./auth');
 const comicsCache = require('./comics-cache');
 const comics = require('./comics');
@@ -29,7 +31,6 @@ app.use((req, res, next) => {
 
 app.get(CONST.ROUTES.root, (req, res) => res.json({ok: 1}));
 
-// app.use(CONST.ROUTES.all, (req, res, next) => {req.user= 'pouyio'; next()});
 // middleware
 app.use(CONST.ROUTES.root, auth);
 // middleware
@@ -38,3 +39,5 @@ app.use(CONST.ROUTES.root, comicsCache);
 app.use(CONST.ROUTES.root, comics);
 
 app.listen(process.env.PORT || 8080, () => console.log(`Comics-api2 listening on port ${process.env.PORT || 8080}!`));
+
+module.exports = Webtask.fromExpress(app);
