@@ -38,6 +38,6 @@ app.use(CONST.ROUTES.root, comicsCache);
 
 app.use(CONST.ROUTES.root, comics);
 
-app.listen(process.env.PORT || 8080, () => console.log(`Comics-api2 listening on port ${process.env.PORT || 8080}!`));
+app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
 
 // module.exports = Webtask.fromExpress(app);
