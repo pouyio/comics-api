@@ -29,8 +29,8 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
     let json = await extract.details(body, req);
     if(json.data) {
       mongo.saveCache(json, cache_key);
-      let issuesRead = await mongo.retrieveIssuesRead(req.params.name, req.user);
-      Object.assign(json, {issuesRead});
+      let [issuesRead, wish] = await mongo.retrieveIssuesRead(req.params.name, req.user);
+      Object.assign(json, {issuesRead, wish});
     }
     res.send(json);
   } catch (err) {
@@ -42,6 +42,11 @@ router.get(CONST.ROUTES.comic.detail, async (req, res) => {
 
 router.post(CONST.ROUTES.comic.detail, async (req, res) => {
   let result = await mongo.markIssueRead(req.params.name, req.body.issue, req.body.read, req.user);
+  res.send(result);
+});
+
+router.post(CONST.ROUTES.comic.wish, async (req, res) => {
+  let result = await mongo.markComicWish(req.params.name, req.body.wish, req.user);
   res.send(result);
 });
 

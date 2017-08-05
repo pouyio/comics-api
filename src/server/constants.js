@@ -18,6 +18,7 @@ const ROUTES = {
   },
   comic: {
     detail: '/comic/:name',
+    wish: '/comic/wish/:name',
     issue: '/comic/:name/:issue'
   },
   genres: '/genres/:name?/:page?',
