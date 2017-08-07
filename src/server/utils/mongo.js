@@ -1,70 +1,47 @@
-const mongo = require('mongodb').MongoClient;
 const CONST = require('../constants');
+const MongoClient = require('mongodb').MongoClient
+
+const state = {
+  db: null,
+}
 
 const checkCache = async (cacheKey) => {
-  const db = await mongo.connect(CONST.MONGO_URL);
-  const document = await db.collection('cache').findOne({cacheKey}, {_id: 0, result: 1 });
-  await db.close();
-
+  const document = await state.db.collection('cache').findOne({cacheKey}, {_id: 0, result: 1 });
   return document ? document.result: '';
 }
 
 const saveCache = async (data, cacheKey) => {
-  const db = await mongo.connect(CONST.MONGO_URL);
-  await db.collection('cache').insert({
+  await state.db.collection('cache').insert({
       "createdAt": new Date(),
       "cacheKey": cacheKey,
       "result": data
     });
-  await db.close();
 }
 
 const retrieveUser = async (user) => {
-  const db = await mongo.connect(CONST.MONGO_URL);
-  const document = await db.collection('users').findOne({user}, {_id: 0, user: 1 });
-  await db.close();
-
-  return document;
+  return await state.db.collection('users').findOne({user}, {_id: 0, user: 1 });
 }
 
 const retrieveComicsRead = async (user) => {
-  const db = await mongo.connect(CONST.MONGO_URL);
-  const document = await db.collection('read').find({$or: [{ 'issues.0': {$exists: true}}, {wish: true}], user}, {'_id': 0, user: 0}).toArray();
-  // const document = await db.collection('read').find({user}, {'_id': 0, user: 0}).toArray();
-  await db.close();
-
-  return document;
+  return await state.db.collection('read').find({$or: [{ 'issues.0': {$exists: true}}, {wish: true}], user}, {'_id': 0, user: 0}).toArray();
 }
 
 const retrieveIssuesRead = async (comic, user) => {
-  const db = await mongo.connect(CONST.MONGO_URL);
-  const results = await db.collection('read').findOne({comic, user}, {'_id': 0, issues: 1, wish: 1});
-  await db.close();
+  const results = await state.db.collection('read').findOne({comic, user}, {'_id': 0, issues: 1, wish: 1});
   const issuesRead = (results && results.issues) ? results.issues : [];
   const wish = results? results.wish: false;
-
   return [issuesRead, wish];
 }
 
 const markIssueRead = async (comic, issue, value, user) => {
   let operation = {};
   operation[value ? '$addToSet': '$pull'] = {issues: issue};
-
-  const db = await mongo.connect(CONST.MONGO_URL);
-  const result = await db.collection('read').update({comic, user}, operation, {upsert: true});
-  await db.close();
-
-  return result;
+  return await state.db.collection('read').update({comic, user}, operation, {upsert: true});
 }
 
 const markComicWish = async (comic, value, user) => {
-  const db = await mongo.connect(CONST.MONGO_URL);
-  const result = await db.collection('read').update({comic, user}, {$set: {wish: value}}, {upsert: true});
-  await db.close();
-
-  return result;
+  return await state.db.collection('read').update({comic, user}, {$set: {wish: value}}, {upsert: true});
 }
-
 
 module.exports = {
   checkCache,
@@ -73,5 +50,11 @@ module.exports = {
   retrieveComicsRead,
   retrieveIssuesRead,
   markIssueRead,
-  markComicWish
+  markComicWish,
+  connect: (url) => {
+    MongoClient.connect(url, (err, db) => {
+      if (err) throw new Error('Db connection fail');
+      state.db = db;
+    })
+  }
 }

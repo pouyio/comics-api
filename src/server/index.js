@@ -3,41 +3,36 @@ const app = express();
 const morgan = require('morgan');
 const errorHandler = require('errorhandler');
 const bodyParser = require('body-parser');
-// const Webtask = require('webtask-tools');
 
+const db = require('./utils/mongo');
 const auth = require('./auth');
 const comicsCache = require('./comics-cache');
 const comics = require('./comics');
+const cors = require('./cors');
 const CONST = require('./constants');
 
+db.connect(CONST.MONGO_URL);
+
+// MIDDLEWARE
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(errorHandler({showStack: true, dumpExceptions: true}));
 
-app.use((req, res, next) => {
 
-  res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-xsrf-token, Authorization');
+// CORS middleware
+app.use(cors);
 
-    if ('OPTIONS' == req.method) {
-      res.sendStatus(200);
-    }
-    else {
-      next();
-    }
-});
-
+// app status middleware
 app.get(CONST.ROUTES.root, (req, res) => res.json({ok: 1}));
 
-// middleware
+// authentication middleware
 app.use(CONST.ROUTES.root, auth);
-// middleware
+
+// cache middleware
 app.use(CONST.ROUTES.root, comicsCache);
 
+// current app
 app.use(CONST.ROUTES.root, comics);
 
 app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
-
-// module.exports = Webtask.fromExpress(app);
