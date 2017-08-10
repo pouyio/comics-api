@@ -20,34 +20,9 @@ router.get(CONST.ROUTES.comics.news, async (req, res) => {
   }
 });
 
-router.get(CONST.ROUTES.comic.detail, async (req, res) => {
-  const url = `${CONST.SOURCE_URL}Comic/${req.params.name}`;
-  const cache_key = get_cache_key('comics\\:detail\\::name', req.params);
-
-  try {
-    let body = await sourceServer.makeRequest({url});
-    let json = await extract.details(body, req);
-    if(json.data) {
-      mongo.saveCache(json, cache_key);
-      let [issuesRead, wish] = await mongo.retrieveIssuesRead(req.params.name, req.user);
-      Object.assign(json, {issuesRead, wish});
-    }
-    res.send(json);
-  } catch (err) {
-    console.log(err);
-    res.end();
-  }
-
-});
-
-router.post(CONST.ROUTES.comic.detail, async (req, res) => {
-  let result = await mongo.markIssueRead(req.params.name, req.body.issue, req.body.read, req.user);
-  res.send(result);
-});
-
-router.post(CONST.ROUTES.comic.wish, async (req, res) => {
-  let result = await mongo.markComicWish(req.params.name, req.body.wish, req.user);
-  res.send(result);
+router.get(CONST.ROUTES.comic.detail, async (req, res, next) => {
+  res.locals = await mongo.findComicById(req.params.name);
+  next();
 });
 
 router.get(CONST.ROUTES.comic.issue, async (req, res) => {

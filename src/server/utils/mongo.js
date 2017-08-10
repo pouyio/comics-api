@@ -30,14 +30,14 @@ const saveCache = async (data, cacheKey) => {
 }
 
 const retrieveUser = async (user) => {
-  return await (await getDb()).collection('users').findOne({user}, {_id: 0, user: 1 });
+  return await (await getDb()).collection('users').findOne({_id: user}, {_id:1});
 }
 
 const retrieveComicsRead = async (user) => {
   return await (await getDb()).collection('read').find({$or: [{ 'issues.0': {$exists: true}}, {wish: true}], user}, {'_id': 0, user: 0}).toArray();
 }
 
-const retrieveIssuesRead = async (comic, user) => {
+const retrieveUserInfo = async (comic, user) => {
   const results = await (await getDb()).collection('read').findOne({comic, user}, {'_id': 0, issues: 1, wish: 1});
   const issuesRead = (results && results.issues) ? results.issues : [];
   const wish = results? results.wish: false;
@@ -51,17 +51,37 @@ const markIssueRead = async (comic, issue, value, user) => {
 }
 
 const markComicWish = async (comic, value, user) => {
-  return await (await getDb()).collection('read').update({comic, user}, {$set: {wish: value}}, {upsert: true});
+
+  if (!value) {
+    return await (await getDb()).collection('users').update({_id: user}, {$pull: {comics: { _id: comic}}});
+  }
+
+  const hasComic = await (await getDb()).collection('users').find({_id: user, "comics._id": comic}).count();
+
+  if(!hasComic) {
+    return await (await getDb()).collection('users').update({_id: user}, {"$push": {comics: {_id: comic, issues: []}}});
+  }
+
+  return {ok: 1};
 }
+
+const findComicById = async (comic) => {
+  return await (await getDb()).collection('comics').findOne({_id: comic});
+}
+
+// const findIssueByIds = async (comic, issue) => {
+//   return await (await getDb()).collection('comics').findOne({_id: comic});
+// }
 
 module.exports = {
   checkCache,
   saveCache,
   retrieveUser,
   retrieveComicsRead,
-  retrieveIssuesRead,
+  retrieveUserInfo,
   markIssueRead,
   markComicWish,
+  findComicById,
   connect: (url) => {
     MongoClient.connect(url, (err, db) => {
       if (err) throw new Error('Db connection fail');

@@ -2,6 +2,8 @@ const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds163060.mlab.com:63060/comic-cac
 
 const SOURCE_URL = 'http://readcomiconline.to/';
 
+const SECRET = 'myPubL!cS3cr3t';
+
 const ROUTES = {
   all: '/*',
   root: '/',
@@ -18,7 +20,7 @@ const ROUTES = {
   },
   comic: {
     detail: '/comic/:name',
-    wish: '/comic/wish/:name',
+    wish: '/comic_wish/:name',
     issue: '/comic/:name/:issue'
   },
   genres: '/genres/:name?/:page?',
@@ -31,6 +33,7 @@ const GENRES = ['Action', 'Adventure', 'Anthology', 'Anthropomorphic', 'Biograph
 
 Object.assign(module.exports, {
   ROUTES,
+  SECRET,
   GENRES,
   MONGO_URL,
   SOURCE_URL
