@@ -5,7 +5,6 @@ const mongo = require('./utils/mongo');
 const sourceServer = require('./source');
 
 const _secret = 'myPubL!cS3cr3t';
-var globalUser = '';
 
 const _check_token = async (req, res, next) => {
   let user = '';
