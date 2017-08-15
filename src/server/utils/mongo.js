@@ -16,11 +16,12 @@ const getDb = async () => {
   }
 }
 
+// TODO DEPRACATED
 const checkCache = async (cacheKey) => {
   const document = await (await getDb()).collection('cache').findOne({cacheKey}, {_id: 0, result: 1 });
   return document ? document.result: '';
 }
-
+// TODO DEPRACATED
 const saveCache = async (data, cacheKey) => {
   await (await getDb()).collection('cache').insert({
       "createdAt": new Date(),
@@ -38,9 +39,13 @@ const retrieveComicsRead = async (user) => {
 }
 
 const retrieveUserInfo = async (comic, user) => {
-  const results = await (await getDb()).collection('read').findOne({comic, user}, {'_id': 0, issues: 1, wish: 1});
-  const issuesRead = (results && results.issues) ? results.issues : [];
-  const wish = results? results.wish: false;
+  const results = await (await getDb()).collection('users').findOne({_id: user, 'comics._id': comic}, {_id: 0, 'comics.wish': 1, 'comics.issues': 1});
+
+  if(!results) {
+    return [[], false];
+  }
+  const issuesRead = results.comics[0].issues;
+  const wish = results.comics[0].wish;
   return [issuesRead, wish];
 }
 
