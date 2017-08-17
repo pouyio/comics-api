@@ -3,7 +3,7 @@ const mongo = require('./utils/mongo');
 const CONST = require('./constants');
 
 router.get(CONST.ROUTES.comic.detail, async (req, res) => {
-  const [issuesRead, wish] = await mongo.retrieveUserInfo(req.params.name, req.user);
+  const [issuesRead, wish] = await mongo.retrieveComicUserInfo(req.params.name, req.user);
   Object.assign(res.locals, {issuesRead, wish});
   res.send(res.locals);
 });

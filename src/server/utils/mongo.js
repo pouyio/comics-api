@@ -38,7 +38,7 @@ const retrieveComicsRead = async (user) => {
   return await (await getDb()).collection('read').find({$or: [{ 'issues.0': {$exists: true}}, {wish: true}], user}, {'_id': 0, user: 0}).toArray();
 }
 
-const retrieveUserInfo = async (comic, user) => {
+const retrieveComicUserInfo = async (comic, user) => {
   const results = await (await getDb()).collection('users').findOne({_id: user, 'comics._id': comic}, {_id: 0, 'comics.wish': 1, 'comics.issues': 1});
 
   if(!results) {
@@ -74,19 +74,37 @@ const findComicById = async (comic) => {
   return await (await getDb()).collection('comics').findOne({_id: comic});
 }
 
-// const findIssueByIds = async (comic, issue) => {
-//   return await (await getDb()).collection('comics').findOne({_id: comic});
-// }
+const findIssueById = async (comic, issue) => {
+  const aggregation = [];
+  aggregation.push({$match: {_id: comic}},);
+  aggregation.push({
+    $project: {
+      _id: 0,
+      included: {
+        $filter: {
+          input: '$included',
+          as: 'issue',
+          cond: {
+            $eq: ['$$issue.id', issue]
+          }
+        }
+      }
+    }
+  });
+  aggregation.push({$unwind: '$included'});
+  return await (await getDb()).collection('comics').aggregate(aggregation).toArray();
+}
 
 module.exports = {
   checkCache,
   saveCache,
   retrieveUser,
   retrieveComicsRead,
-  retrieveUserInfo,
+  retrieveComicUserInfo,
   markIssueRead,
   markComicWish,
   findComicById,
+  findIssueById,
   connect: (url) => {
     MongoClient.connect(url, (err, db) => {
       if (err) throw new Error('Db connection fail');
