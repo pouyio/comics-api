@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 
 const db = require('./utils/mongo');
 const auth = require('./auth');
-const comicsCache = require('./comics-cache');
 const comics = require('./comics');
 const userInfo = require('./user-info');
 const cors = require('./cors');
@@ -26,9 +25,6 @@ app.get(CONST.ROUTES.root, (req, res) => res.json({ok: 1}));
 
 // authentication middleware
 app.use(CONST.ROUTES.root, auth);
-
-// cache middleware
-// app.use(CONST.ROUTES.root, comicsCache);
 
 // current app
 app.use(CONST.ROUTES.root, comics);

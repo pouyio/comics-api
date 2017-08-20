@@ -9,6 +9,7 @@ const mongo = require('./utils/mongo');
 
 const CONST = require('./constants');
 
+// TODO DEPRACATED
 router.get(CONST.ROUTES.comics.news, async (req, res) => {
   try {
     let body = await sourceServer.makeRequest({url: CONST.SOURCE_URL});
@@ -25,36 +26,34 @@ router.get(CONST.ROUTES.comic.detail, async (req, res, next) => {
   next();
 });
 
-router.get(CONST.ROUTES.comic.issue, async (req, res) => {
+router.get(CONST.ROUTES.comic.issue, async (req, res, next) => {
   const issueDoc = await mongo.findIssueById(req.params.name, req.params.issue);
   const issue = issueDoc.length? issueDoc[0].included: issueDoc;
-  const response = issue.pages? issue: 'nope';
+  if(!issue.pages) {
+    const url = `${CONST.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
 
-  res.send(issue);
-  // next();
+    try {
+      const body = await sourceServer.makeRequest({url});
+      const pages = await extract.issue(body);
+      mongo.setPages(req.params.name, req.params.issue, pages);
+      issue.pages = pages;
+    }catch(e) {
+      console.log(err);
+      issue.pages = err;
+    }
+  }
+  res.locals = issue;
+  next();
 });
-// router.get(CONST.ROUTES.comic.issue, async (req, res) => {
-//   const url = `${CONST.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
-//   const cache_key = get_cache_key('comics\\:detail\\::name\\::issue', req.params);
-//
-//   try {
-//     let body = await sourceServer.makeRequest({url});
-//     let json = await extract.issue(body, req);
-//     mongo.saveCache(json, cache_key);
-//     res.send(json);
-//   } catch (err) {
-//     console.log(err);
-//     res.end();
-//   }
-// });
 
 // TODO download PDF
-router.post(CONST.ROUTES.comic.issue, (req, res) => {
+// router.post(CONST.ROUTES.comic.issue, (req, res) => {
+//
+//   res.send('pdf');
+//
+// });
 
-  res.send('pdf');
-
-});
-
+// TODO DEPRACATED
 router.get(CONST.ROUTES.comics.search, setCookie, async (req, res) => {
   let request_options = {
     url: `${CONST.SOURCE_URL}AdvanceSearch`,
@@ -72,6 +71,7 @@ router.get(CONST.ROUTES.comics.search, setCookie, async (req, res) => {
   }
 });
 
+// TODO DEPRACATED
 router.get(CONST.ROUTES.comics.list, async (req, res) => {
   const url = `${CONST.SOURCE_URL}ComicList/`;
   const cache_key = get_cache_key("comics\\:letter\\::letter?\\:page\\::page?", req.params);
@@ -100,11 +100,6 @@ router.get(CONST.ROUTES.comics.list, async (req, res) => {
     console.log(err);
     res.end();
   }
-});
-
-router.get(CONST.ROUTES.comics.read, async (req, res) => {
-  let result = await mongo.retrieveComicsRead(req.user);
-  res.send(result);
 });
 
 // TODO: get all genres from source
