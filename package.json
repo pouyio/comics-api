@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "start:inspect": "node --inspect app.js",
-    "start:break": "node --inspect-brk app.js",
-    "start:demon": "nodemon -L --ignore 'cookies.json' app.js"
+    "dev": "node --inspect app.js",
+    "dev:break": "node --inspect-brk app.js",
+    "dev:demon": "nodemon -L --ignore 'cookies.json' app.js"
   },
   "author": "",
   "license": "ISC",
