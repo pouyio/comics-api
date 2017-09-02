@@ -44,7 +44,7 @@ const retrieveUser = async (user) => {
 }
 
 const retrieveComicsRead = async (user) => {
-  return await (await _getDb()).collection('users').findOne({_id: user}, {_id: 0, comics: 1});
+  return await (await _getDb()).collection('users').aggregate([{$match: {_id: user}}, {$project: {_id: 0, comics: 1}}, {$unwind: "$comics"}, {$replaceRoot: { newRoot: "$comics" }}]).toArray();
 }
 
 const retrieveUserComicInfo = async (comic, user) => {
