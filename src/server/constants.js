@@ -1,5 +1,4 @@
 const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds145183.mlab.com:45183/comics';
-// const MONGO_URL = 'mongodb://localhost:27017/comics';
 
 const SOURCE_URL = 'http://readcomiconline.to/';
 
@@ -21,7 +20,6 @@ const ROUTES = {
   },
   comic: {
     detail: '/comic/:name',
-    wish: '/comic_wish/:name',
     issue: '/comic/:name/:issue'
   },
   genres: '/genres/:name?/:page?',
