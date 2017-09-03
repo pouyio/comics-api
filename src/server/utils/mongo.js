@@ -54,7 +54,7 @@ const retrieveUserComicInfo = async (comic, user) => {
   aggregation.push({$match: {'comics._id': comic }});
   aggregation.push({$replaceRoot: { newRoot: "$comics" }});
   aggregation.push({$project: {_id: 0}});
-  return await (await _getDb()).collection('users').aggregate(aggregation).toArray();
+  return (await (await _getDb()).collection('users').aggregate(aggregation).toArray())[0];
 }
 
 const retrieveUserIssueInfo = async (comic, issue, user) => {
