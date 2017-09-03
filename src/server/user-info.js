@@ -37,7 +37,7 @@ router.post(CONST.ROUTES.comic.issue, async (req, res) => {
     resultRead = await mongo.markIssueRead(req.params.name, req.params.issue, req.body.read, req.user);
   }
 
-  res.send({resultPage, resultRead});
+  res.send({ok: 1});
 });
 
 router.get(CONST.ROUTES.comics.read, async (req, res) => {
