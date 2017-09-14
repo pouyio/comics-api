@@ -53,8 +53,13 @@ router.get(CONST.ROUTES.comic.issue, async (req, res, next) => {
 //
 // });
 
+router.get(CONST.ROUTES.comics.search, async (req, res) => {
+  const results = await mongo.search(req.query.exact, req.query.query);
+  res.send(results);
+});
+
 // TODO DEPRACATED
-router.get(CONST.ROUTES.comics.search, setCookie, async (req, res) => {
+router.get(CONST.ROUTES.comics.search_old, setCookie, async (req, res) => {
   let request_options = {
     url: `${CONST.SOURCE_URL}AdvanceSearch`,
     body: `comicName=${req.params.keyword || ''}&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&genres=0&status=`,

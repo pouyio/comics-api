@@ -125,6 +125,15 @@ const setPages = async (comic, issue, pages) => {
   (await _getDb()).collection('comics').update({_id: comic, 'included.id' : issue}, {$set: {'included.$.pages': pages}});
 }
 
+const search = async (exact = false, query = '') => {
+  if(!query) return [];
+  const text = exact ? `\"${query}\"`: query;
+  return await (await _getDb()).collection('comics').find(
+    { $text: {$search: text}},
+    { score: { $meta: "textScore" }, included: 0}
+  ).sort({ score: { $meta: "textScore" }}).toArray();
+}
+
 module.exports = {
   retrieveUser,
   retrieveComicsRead,
@@ -136,6 +145,7 @@ module.exports = {
   findComicById,
   findIssueById,
   setPages,
+  search,
   connect: (url) => {
     MongoClient.connect(url, (err, db) => {
       if (err) throw new Error('Db connection fail');
