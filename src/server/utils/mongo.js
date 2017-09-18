@@ -97,7 +97,11 @@ const markComicWish = async (comic, value, user) => {
 }
 
 const findComicById = async (comic) => {
-  return await (await _getDb()).collection('comics').findOne({_id: comic});
+  const fullComic = await (await _getDb()).collection('comics').findOne({_id: comic});
+  fullComic.cover = (fullComic.cover.indexOf('/img/') === 0)
+  ? `${CONST.API_URL}${fullComic.cover}`
+  : fullComic.cover;
+  return fullComic;
 }
 
 const findIssueById = async (comic, issue) => {
@@ -128,10 +132,17 @@ const setPages = async (comic, issue, pages) => {
 const search = async (exact = false, query = '') => {
   if(!query) return [];
   const text = exact ? `\"${query}\"`: query;
-  return await (await _getDb()).collection('comics').find(
+  const comics = await (await _getDb()).collection('comics').find(
     { $text: {$search: text}},
     { score: { $meta: "textScore" }, included: 0}
   ).sort({ score: { $meta: "textScore" }}).toArray();
+
+  return comics.map(comic => {
+    comic.cover = (comic.cover.indexOf('/img/') === 0)
+    ? `${CONST.API_URL}${comic.cover}`
+    : comic.cover;
+    return comic;
+  })
 }
 
 module.exports = {

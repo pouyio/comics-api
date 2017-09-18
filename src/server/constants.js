@@ -1,5 +1,7 @@
 const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds145183.mlab.com:45183/comics';
 
+const API_URL = 'http://ec2-52-57-163-72.eu-central-1.compute.amazonaws.com:8080';
+
 const SOURCE_URL = 'http://readcomiconline.to/';
 
 const SECRET = 'myPubL!cS3cr3t';
@@ -36,5 +38,6 @@ Object.assign(module.exports, {
   SECRET,
   GENRES,
   MONGO_URL,
-  SOURCE_URL
+  SOURCE_URL,
+  API_URL
 })
