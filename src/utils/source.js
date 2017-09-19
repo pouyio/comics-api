@@ -1,5 +1,5 @@
 const request = require('request-promise');
-const challenge = require('./utils/challenge');
+const challenge = require('./challenge');
 const FileCookieStore = require("tough-cookie-filestore");
 const fs = require('fs');
 const path = require('path');

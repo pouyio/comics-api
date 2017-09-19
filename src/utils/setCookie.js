@@ -1,4 +1,4 @@
-const sourceServer = require('../source');
+const sourceServer = require('./source');
 const CONST = require('../constants');
 
 module.exports = async (req, res, next) => {
