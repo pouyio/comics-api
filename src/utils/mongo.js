@@ -43,8 +43,22 @@ const retrieveUser = async (user) => {
   return await (await _getDb()).collection('users').findOne({_id: user}, {_id:1});
 }
 
+const _notInteresting = (comic) => {
+  if(!comic.wish) {
+    const keys = Object.keys(comic).filter(k => k != 'id' && k != 'wish');
+    const interesting = keys.map(k => comic[k].page || comic[k].read)
+    return interesting.includes(true);
+  }
+  return true;
+}
+
 const retrieveComicsRead = async (user) => {
-  return await (await _getDb()).collection('users').aggregate([{$match: {_id: user}}, {$project: {_id: 0, comics: 1}}, {$unwind: "$comics"}, {$replaceRoot: { newRoot: "$comics" }}]).toArray();
+  const aggregation = [];
+  aggregation.push({$match: {_id: user}},);
+  aggregation.push({$project: {_id: 0, comics: 1}},);
+  aggregation.push({$unwind: "$comics"},);
+  aggregation.push({$replaceRoot: { newRoot: "$comics" }});
+  return (await (await _getDb()).collection('users').aggregate(aggregation).toArray()).filter(_notInteresting);
 }
 
 const retrieveUserComicInfo = async (comic, user) => {
