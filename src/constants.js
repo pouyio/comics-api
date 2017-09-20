@@ -1,6 +1,10 @@
-const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds163060.mlab.com:63060/comic-cache';
+const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds145183.mlab.com:45183/comics';
+
+const API_URL = 'http://ec2-52-57-163-72.eu-central-1.compute.amazonaws.com:8080';
 
 const SOURCE_URL = 'http://readcomiconline.to/';
+
+const SECRET = 'myPubL!cS3cr3t';
 
 const ROUTES = {
   all: '/*',
@@ -12,13 +16,13 @@ const ROUTES = {
   },
   comics: {
     list: '/comics/:letter(0|[a-z])?/:page(\\d+)?',
-    search: '/comics/search/:keyword/:genres([012]{47})?/:status(ongoing|completed)?',
+    search_old: '/comics/search_old/:keyword/:genres([012]{47})?/:status(ongoing|completed)?',
+    search: '/comics/search',
     read: '/comics/read',
     news: '/comics/news'
   },
   comic: {
     detail: '/comic/:name',
-    wish: '/comic/wish/:name',
     issue: '/comic/:name/:issue'
   },
   genres: '/genres/:name?/:page?',
@@ -31,7 +35,9 @@ const GENRES = ['Action', 'Adventure', 'Anthology', 'Anthropomorphic', 'Biograph
 
 Object.assign(module.exports, {
   ROUTES,
+  SECRET,
   GENRES,
   MONGO_URL,
-  SOURCE_URL
+  SOURCE_URL,
+  API_URL
 })

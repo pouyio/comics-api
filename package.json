@@ -2,13 +2,12 @@
   "name": "comics-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "start:inspect": "node --inspect app.js",
-    "start:break": "node --inspect-brk app.js",
-    "start:demon": "nodemon --ignore 'cookies.json' app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --inspect app.js",
+    "dev:break": "node --inspect-brk app.js",
+    "dev:demon": "nodemon -L --ignore 'cookies.json' app.js"
   },
   "author": "",
   "license": "ISC",

@@ -2,33 +2,20 @@ const router = require('express').Router();
 const CONST = require('./constants');
 const jwt = require('jsonwebtoken');
 const mongo = require('./utils/mongo');
-const sourceServer = require('./source');
-
-const _secret = 'myPubL!cS3cr3t';
+const sourceServer = require('./utils/source');
 
 const _check_token = async (req, res, next) => {
-  let user = '';
-
   try {
-    user = await jwt.verify(req.headers.authorization, _secret);
+    req.user = await jwt.verify(req.headers.authorization, CONST.SECRET);
+    next();
   } catch(e) {
     res.status(401).send(e);
-    return;
   }
-
-  // TODO avoid making this DB request everytime, save in memory or smth
-  if(await mongo.retrieveUser(user)) {
-    req.user = user;
-    next();
-    return;
-  }
-
-  res.status(401).send('User not registered');
 }
 
 router.post(CONST.ROUTES.auth.login, async (req, res, next) => {
   if(await mongo.retrieveUser(req.body.user)) {
-    let token = jwt.sign(req.body.user, _secret);
+    const token = jwt.sign(req.body.user, CONST.SECRET);
     res.send(token);
     return;
   }
@@ -39,7 +26,7 @@ router.post(CONST.ROUTES.auth.login, async (req, res, next) => {
 router.get(CONST.ROUTES.img, async (req, res) => {
   const url = `${CONST.SOURCE_URL}${req.params['0']}`;
   try {
-    let body = await sourceServer.makeRequest({url, encoding: null});
+    const body = await sourceServer.makeRequest({url, encoding: null});
     res.header('Content-Type', 'image/jpeg');
     res.send(body);
   } catch (err) {

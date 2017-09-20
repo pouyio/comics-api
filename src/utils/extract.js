@@ -251,16 +251,8 @@ const listing = (body, request) => {
   });
 }
 
-const issue = (body, request) => {
-  var json_data = {
-    data: {
-      type: 'issues',
-      id: `${request.params.name}-${request.params.issue}`,
-      attributes: {
-        pages: []
-      }
-    }
-  };
+const issue = (body) => {
+  var data = [];
 
   var lines = body.split("\n");
 
@@ -268,12 +260,11 @@ const issue = (body, request) => {
     var match = line.match(/lstImages\.push\(["'](.*?)["']\);/i);
 
     if (!!match) {
-      json_data.data.attributes.pages.push(match[1]);
+      data.push(match[1]);
     }
   };
 
-  var p = Promise.resolve(json_data);
-  p.__name = 'Comic issue';
+  var p = Promise.resolve(data);
   return p;
 };
 
