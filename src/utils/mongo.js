@@ -45,8 +45,8 @@ const retrieveUser = async (user) => {
 
 const _notInteresting = (comic) => {
   if(!comic.wish) {
-    const keys = Object.keys(comic).filter(k => k != 'id' && k != 'wish');
-    const interesting = keys.map(k => comic[k].page || comic[k].read)
+    const keys = Object.keys(comic).filter(k => k != '_id' && k != 'wish');
+    const interesting = keys.map(k => !!comic[k].page || !!comic[k].read)
     return interesting.includes(true);
   } else {
     return true;
