@@ -48,8 +48,9 @@ const _notInteresting = (comic) => {
     const keys = Object.keys(comic).filter(k => k != 'id' && k != 'wish');
     const interesting = keys.map(k => comic[k].page || comic[k].read)
     return interesting.includes(true);
+  } else {
+    return true;
   }
-  return true;
 }
 
 const retrieveComicsRead = async (user) => {
