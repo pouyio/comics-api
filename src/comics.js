@@ -17,13 +17,13 @@ router.get(CONST.ROUTES.comic.issue, async (req, res, next) => {
     const url = `${CONST.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
 
     try {
-      const body = await sourceServer.makeRequest({url});
+      const body = await sourceServer.makeRequest(url);
       const pages = await extract.issue(body);
       mongo.setPages(req.params.name, req.params.issue, pages);
       issue.pages = pages;
     }catch(e) {
-      console.log(err);
-      issue.pages = err;
+      console.log(e);
+      issue.pages = [];
     }
   }
   res.locals = issue;
