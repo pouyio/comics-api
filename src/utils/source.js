@@ -4,6 +4,8 @@ const FileCookieStore = require("tough-cookie-filestore");
 const fs = require('fs');
 const path = require('path');
 
+const cloudscraper = require('cloudscraper');
+
 const _get_cookie_filename = () => {
   let full_path, stat;
   try {
@@ -17,7 +19,7 @@ const _get_cookie_filename = () => {
   return full_path;
 };
 
-const make_request = async (request_options) => {
+const make_request1 = async (request_options) => {
   // TODO leave only one headers object global
   const request_headers = {
     "Host": 'readcomiconline.to',
@@ -78,6 +80,11 @@ const make_request = async (request_options) => {
   }
 
 }
+
+const make_request = url =>  new Promise((resolve, reject) => {
+  cloudscraper.get(url, (error, response, body) => error ? reject(error): resolve(body));
+});
+
 
 Object.assign(module.exports, {
   makeRequest: make_request

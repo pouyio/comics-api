@@ -22,8 +22,12 @@ const pass = (url, html) => {
       var protocol_domain = url.match(/(https?:\/\/[^\/]+)/)[0];
 
       lines.splice(-1, 0, "t = '" + protocol_domain.replace(/https?:\/\//, '') + "';");
+      try {
+        eval(" challenge_answer = (function() {\n" + lines.join("\n") + " '; 121' })();");
+      } catch(e) {
+        challenge_answer = 25000;
+      }
 
-      eval(" challenge_answer = (function() {\n" + lines.join("\n") + " '; 121' })();");
 
       var $ = cheerio.load(html);
 
