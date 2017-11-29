@@ -1,3 +1,11 @@
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const options = {
+	key: fs.readFileSync('./privatekey.pem'),
+	cert: fs.readFileSync('./server.crt')
+}
+
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -32,4 +40,6 @@ app.use(CONST.ROUTES.root, comics);
 // user middleware
 app.use(CONST.ROUTES.root, userInfo);
 
-app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
+const httpsServer = https.createServer(options, app);
+//app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
+httpsServer.listen(443);
