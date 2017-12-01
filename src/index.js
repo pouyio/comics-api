@@ -2,8 +2,8 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const options = {
-	key: fs.readFileSync('./privatekey.pem'),
-	cert: fs.readFileSync('./server.crt')
+	key: fs.readFileSync('/etc/letsencrypt/live/comic.vicenteortiz.me/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/comic.vicenteortiz.me/fullchain.pem')
 }
 
 const express = require('express');
