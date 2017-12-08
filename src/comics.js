@@ -14,7 +14,7 @@ router.get(CONST.ROUTES.comic.issue, async (req, res, next) => {
   const issueDoc = await mongo.findIssueById(req.params.name, req.params.issue);
   const issue = issueDoc.length? issueDoc[0].included: issueDoc;
   if(!issue.pages) {
-    const url = `${CONST.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
+    const url = `${process.env.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
 
     try {
       const body = await sourceServer.makeRequest(url);

@@ -1,4 +1,3 @@
-const CONST = require('../constants');
 const MongoClient = require('mongodb').MongoClient
 
 const _state = {
@@ -8,7 +7,7 @@ const _state = {
 const _getDb = async () => {
   if(_state.db) return _state.db;
   try {
-    const db = await MongoClient.connect(CONST.MONGO_URL);
+    const db = await MongoClient.connect(process.env.MONGO_URL);
     _state.db = db;
     return db;
   }catch (e) {
@@ -114,7 +113,7 @@ const markComicWish = async (comic, value, user) => {
 const findComicById = async (comic) => {
   const fullComic = await (await _getDb()).collection('comics').findOne({_id: comic});
   fullComic.cover = (fullComic.cover.indexOf('/img/') === 0)
-  ? `${CONST.API_URL}${fullComic.cover}`
+  ? `${process.env.API_URL}${fullComic.cover}`
   : fullComic.cover;
   return fullComic;
 }
@@ -154,7 +153,7 @@ const search = async (exact = false, query = '') => {
 
   return comics.map(comic => {
     comic.cover = (comic.cover.indexOf('/img/') === 0)
-    ? `${CONST.API_URL}${comic.cover}`
+    ? `${process.env.API_URL}${comic.cover}`
     : comic.cover;
     return comic;
   })

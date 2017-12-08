@@ -1,11 +1,3 @@
-const MONGO_URL = 'mongodb://pouyio:pouyio1590@ds145183.mlab.com:45183/comics';
-
-const API_URL = 'http://ec2-52-57-163-72.eu-central-1.compute.amazonaws.com:8080';
-
-const SOURCE_URL = 'http://readcomiconline.to/';
-
-const SECRET = 'myPubL!cS3cr3t';
-
 const ROUTES = {
   all: '/*',
   root: '/',
@@ -35,9 +27,5 @@ const GENRES = ['Action', 'Adventure', 'Anthology', 'Anthropomorphic', 'Biograph
 
 Object.assign(module.exports, {
   ROUTES,
-  SECRET,
-  GENRES,
-  MONGO_URL,
-  SOURCE_URL,
-  API_URL
+  GENRES
 })

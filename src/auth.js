@@ -6,7 +6,7 @@ const sourceServer = require('./utils/source');
 
 const _check_token = async (req, res, next) => {
   try {
-    req.user = await jwt.verify(req.headers.authorization, CONST.SECRET);
+    req.user = await jwt.verify(req.headers.authorization, process.env.SECRET);
     next();
   } catch(e) {
     res.status(401).send(e);
@@ -15,7 +15,7 @@ const _check_token = async (req, res, next) => {
 
 router.post(CONST.ROUTES.auth.login, async (req, res, next) => {
   if(await mongo.retrieveUser(req.body.user)) {
-    const token = jwt.sign(req.body.user, CONST.SECRET);
+    const token = jwt.sign(req.body.user, process.env.SECRET);
     res.send(token);
     return;
   }
@@ -24,7 +24,7 @@ router.post(CONST.ROUTES.auth.login, async (req, res, next) => {
 })
 
 router.get(CONST.ROUTES.img, async (req, res) => {
-  const url = `${CONST.SOURCE_URL}${req.params['0']}`;
+  const url = `${process.env.SOURCE_URL}${req.params['0']}`;
   try {
     const body = await sourceServer.makeRequest(url);
     res.header('Content-Type', 'image/jpeg');
