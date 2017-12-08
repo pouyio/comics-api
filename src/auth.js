@@ -26,8 +26,8 @@ router.post(CONST.ROUTES.auth.login, async (req, res, next) => {
 router.get(CONST.ROUTES.img, async (req, res) => {
   const url = `${process.env.SOURCE_URL}${req.params['0']}`;
   try {
-    const body = await sourceServer.makeRequest(url);
-    res.header('Content-Type', 'image/jpeg');
+    const {body, type} = await sourceServer.makeRequest(url);
+    res.header('Content-Type', type);
     res.send(body);
   } catch (err) {
     console.log(err);

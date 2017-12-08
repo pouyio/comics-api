@@ -17,7 +17,7 @@ router.get(CONST.ROUTES.comic.issue, async (req, res, next) => {
     const url = `${process.env.SOURCE_URL}Comic/${req.params.name}/${req.params.issue}?readType=1&quality=hq`;
 
     try {
-      const body = await sourceServer.makeRequest(url);
+      const {body} = await sourceServer.makeRequest(url);
       const pages = await extract.issue(body);
       mongo.setPages(req.params.name, req.params.issue, pages);
       issue.pages = pages;
