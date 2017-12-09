@@ -143,13 +143,13 @@ const setPages = async (comic, issue, pages) => {
   (await _getDb()).collection('comics').update({_id: comic, 'included.id' : issue}, {$set: {'included.$.pages': pages}});
 }
 
-const search = async (exact = false, query = '') => {
+const search = async (exact = false, query = '', limit = 15) => {
   if(!query) return [];
   const text = exact ? `\"${query}\"`: query;
   const comics = await (await _getDb()).collection('comics').find(
     { $text: {$search: text}},
     { score: { $meta: "textScore" }, included: 0}
-  ).sort({ score: { $meta: "textScore" }}).toArray();
+  ).limit( limit ).sort({ score: { $meta: "textScore" }}).toArray();
 
   return comics.map(comic => {
     comic.cover = (comic.cover.indexOf('/img/') === 0)
