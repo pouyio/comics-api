@@ -1,6 +1,4 @@
 const fs = require('fs');
-const https = require('https');
-
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -36,6 +34,7 @@ app.use(CONST.ROUTES.root, comics);
 app.use(CONST.ROUTES.root, userInfo);
 
 if (process.env.NODE_ENV === 'production') {
+	const https = require('https');
 	const options = {
 		key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
 		cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
