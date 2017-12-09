@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
 		key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
 		cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
 	}
-	const httpsServer = https.createServer(options || {}, app);
+	const httpsServer = https.createServer(options, app);
 	httpsServer.listen(443, () => console.log(`Comics-api listening on port 443!`));
 } else {
 	app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
