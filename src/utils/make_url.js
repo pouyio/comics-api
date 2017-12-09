@@ -1,5 +1,4 @@
-// TODO make base_url based on env dynamic
-const base_url = 'http://localhost:8080';
+const base_url = process.env.API_URL;
 
 const pathToRegexp = require('path-to-regexp');
 

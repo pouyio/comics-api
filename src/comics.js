@@ -30,13 +30,6 @@ router.get(CONST.ROUTES.comic.issue, async (req, res, next) => {
   next();
 });
 
-// TODO download PDF
-// router.post(CONST.ROUTES.comic.issue, (req, res) => {
-//
-//   res.send('pdf');
-//
-// });
-
 router.get(CONST.ROUTES.comics.search, async (req, res) => {
   const results = await mongo.search(req.query.exact, req.query.query, (+req.query.limit || undefined));
   res.send(results);
