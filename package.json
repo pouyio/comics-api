@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "cheerio": "^1.0.0-rc.2",
     "cloudscraper": "^1.4.1",
     "dotenv": "^4.0.0",
     "errorhandler": "^1.5.0",
@@ -21,8 +20,7 @@
     "jsonwebtoken": "^7.4.1",
     "mongodb": "^2.2.30",
     "mongodb-promise": "0.0.4",
-    "morgan": "^1.8.2",
-    "path-to-regexp": "^1.7.0"
+    "morgan": "^1.8.2"
   },
   "devDependencies": {}
 }
