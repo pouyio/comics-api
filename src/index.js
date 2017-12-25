@@ -38,6 +38,6 @@ const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
 }
-const httpsServer = https.createServer(options || {}, app).listen(process.env.PORT, () => console.log('Comics-api listenin on port ' + process.env.PORT));
-
-// app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
+https
+    .createServer(options || {}, app)
+    .listen(process.env.PORT, () => console.log('Comics-api listenin on port ' + process.env.PORT));
