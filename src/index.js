@@ -1,4 +1,5 @@
 const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -33,4 +34,10 @@ app.use(CONST.ROUTES.root, comics);
 // user middleware
 app.use(CONST.ROUTES.root, userInfo);
 
-app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
+}
+const httpsServer = https.createServer(options || {}, app).listen(process.env.PORT, () => console.log('Comics-api listenin on port ' + process.env.PORT));
+
+// app.listen(process.env.PORT || 8080, () => console.log(`Comics-api listening on port ${process.env.PORT || 8080}!`));
