@@ -34,10 +34,18 @@ app.use(CONST.ROUTES.root, comics);
 // user middleware
 app.use(CONST.ROUTES.root, userInfo);
 
-const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
+if(process.env.NODE_ENV === 'production') {
+    const options = {
+        key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
+    }
+    https
+        .createServer(options || {}, app)
+        .listen(process.env.PORT, () => console.log('Comics-api listenin on port ' + process.env.PORT));
+    } else {
+        
+        require('http')
+            .createServer(app)
+            .listen(process.env.PORT, () => console.log('Comics-api listenin on port ' + process.env.PORT));
 }
-https
-    .createServer(options || {}, app)
-    .listen(process.env.PORT, () => console.log('Comics-api listenin on port ' + process.env.PORT));
+
