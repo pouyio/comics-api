@@ -36,8 +36,8 @@ app.use(CONST.ROUTES.root, userInfo);
 
 if(process.env.NODE_ENV === 'production') {
     const options = {
-        key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
+        key: fs.readFileSync('/etc/letsencrypt/live/aws/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/aws/fullchain.pem')
     }
     https
         .createServer(options || {}, app)
